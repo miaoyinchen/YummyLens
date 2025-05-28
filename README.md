@@ -1,12 +1,11 @@
 # YummyLens
 
-# 執行步驟
-## 前往Azure
+# 前往Azure
 1. 建立一個資源群組
 2. 建立一個電腦視覺
 3. 建立一個翻譯工具
 4. 請勿關掉Azure 頁面，稍後還需要用到
-## 下載這份GitHub檔案
+# 下載這份GitHub檔案
 1. 解壓縮這個資料夾
 2. 從VSCode打開這個資料夾
 3. 進去 .env
@@ -16,18 +15,19 @@
    - TRANSLATOR_KEY  為翻譯工具金鑰
    - TRANSLATOR_REGION  為翻譯工具位置/區域
    - ❗記得按儲存❗
-## 開啟VSCode終端機
+# 開啟VSCode終端機
 下面指令可以改成自己喜歡的名字
-1. ˋdocker image build -t yummylens:latest . ˋ  (大約需跑一分半)
-2. ˋdocker container run -d --name lens -p 8080:8080 yummylens:latest ˋ
+1. `docker image build -t yummylens:latest .`  (大約需跑一分半)
+2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
 3. ❗稍等10秒鐘❗
 4. 打開http://127.0.0.1:8080
-## 如何操作網頁
+# 如何操作網頁
 1. 按【上傳檔案】
 2. 找到food_images這個資料夾(就在剛剛解壓縮的資料夾裡面)
 3. 隨意選擇其中一張照片檔
 4. ❗稍等3秒鐘❗等待下方兩個按鈕呈現可以執行的狀態
 5. 按按看這兩個按鈕
+
 📢可不可以上傳資料夾以外的照片?
 
 可以。
