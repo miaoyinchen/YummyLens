@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>美食辨識</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 20px;
+      background: #FFF8DC;
+      text-align: center;
+    }
+    .container {
+      display: inline-block;
+      width: 480px;
+      background: #FFF;
+      border: 2px solid #D2B48C;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(210,180,140,0.4);
+      padding: 24px;
+      text-align: left;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #8B4513;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #8B4513;
+    }
+    .input-group input[type="text"], .input-group input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 2px dashed #C19A6B;
+      border-radius: 12px;
+      background: #FFF8DC;
+      font-size: 1rem;
+    }
+    .preview {
+      display: block;
+      width: 100%;
+      margin: 12px 0;
+      border: 2px dashed #C19A6B;
+      border-radius: 12px;
+      object-fit: contain;
+      background: #FFF8DC;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      font-weight: 700;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary { background-color: #C19A6B; color: white; }
+    .secondary { background-color: #EED5B7; color: #8B4513; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .result {
+      margin-top: 16px;
+      padding: 12px;
+      background: #FFF5EE;
+      border: 1px solid #EED5B7;
+      border-radius: 12px;
+      color: #333;
+    }
+    .result p { margin: 8px 0; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>美食辨識 🍔🍰</h1>
+  <div class="container">
+    <div class="input-group">
+      <label for="imageFile">請上傳圖片</label>
+      <input type="file" id="imageFile" accept="image/*" />
+    </div>
+    <button class="secondary" onclick="handleInput()">分析圖片</button>
+    <img id="imagePreview" class="preview" src="" alt="尚未上傳圖片" />
+    <div class="btn-group">
+      <button class="secondary" onclick="showNutrition()" id="nutritionBtn" disabled>🍎 查看熱量＆蛋白質</button>
+      <button class="secondary" onclick="showRestaurants()" id="restaurantBtn" disabled>🏠 推薦餐廳</button>
+    </div>
+    <div class="result" id="resultArea" style="display:none;">
+      <p id="nutritionResult"></p>
+      <p id="restaurantResult"></p>
+    </div>
+  </div>
+
+  <script>
+  let currentImage = "";
+  let analysisResult = null;
+
+  function handleInput() {
+    const fileInput = document.getElementById("imageFile").files[0];
+    const preview = document.getElementById("imagePreview");
+
+    if (!fileInput) {
+      alert("請上傳圖片檔案");
+      return;
+    }
+
+    // 檢查檔案格式
+    const fileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'];
+    if (!fileTypes.includes(fileInput.type)) {
+      alert("請上傳有效的圖片檔案（.jpg, .png, .gif, .bmp）");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      currentImage = e.target.result;
+    };
+    reader.readAsDataURL(fileInput);
+    console.log("開始分析上傳圖片:", fileInput.name);
+    analyzeImage(fileInput);
+
+  }
+
+  async function analyzeImage(file) {
+    try {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    console.log("發送請求到 /analyze_upload");
+    const response = await fetch("/analyze_upload", {
+      method: "POST",
+      body: formData
+    });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("後端回應錯誤，狀態碼:", response.status, "訊息:", errorData);
+        alert(errorData.error || "圖片辨識失敗，請確認輸入是否正確（必須是 .jpg 或 .png 檔案）");
+        return;
+      }
+
+      analysisResult = await response.json();
+      console.log("後端回傳資料:", analysisResult);
+
+      // 驗證資料格式
+      if (!analysisResult || !analysisResult.english || !analysisResult.chinese || 
+          analysisResult.calories == null || analysisResult.protein == null || 
+          !Array.isArray(analysisResult.restaurants)) {
+        console.error("後端資料格式不正確:", analysisResult);
+        alert("後端回傳資料格式錯誤，請聯繫管理員");
+        return;
+      }
+
+      // 啟用按鈕
+      document.getElementById("nutritionBtn").disabled = false;
+      document.getElementById("restaurantBtn").disabled = false;
+      console.log("按鈕已啟用");
+
+      // 清空結果
+      document.getElementById("resultArea").style.display = "none";
+      document.getElementById("nutritionResult").innerHTML = "";
+      document.getElementById("restaurantResult").innerHTML = "";
+
+    } catch (error) {
+      console.error("分析失敗:", error);
+      alert("發生錯誤，請檢查網路連線或輸入正確的圖片 URL/檔案");
+    }
+  }
+
+  function showNutrition() {
+    if (!analysisResult) {
+      console.error("未找到分析結果");
+      alert("請先載入並分析圖片");
+      return;
+    }
+
+    console.log("顯示營養資訊");
+    document.getElementById("resultArea").style.display = "block";
+    document.getElementById("nutritionResult").innerHTML = `
+      <p>🔍 <strong>辨識結果（English）:</strong> ${analysisResult.english}</p>
+      <p>🔤 <strong>翻譯結果:</strong> ${analysisResult.chinese.join(", ")}</p>
+      <p>🔥 <strong>熱量:</strong> ${analysisResult.calories} kcal</p>
+      <p>💪 <strong>蛋白質:</strong> ${analysisResult.protein} g</p>
+    `;
+    document.getElementById("restaurantResult").innerHTML = "";
+  }
+
+  function showRestaurants() {
+    if (!analysisResult) {
+      console.error("未找到分析結果");
+      alert("請先載入並分析圖片");
+      return;
+    }
+
+    console.log("顯示餐廳資訊");
+    document.getElementById("resultArea").style.display = "block";
+    document.getElementById("nutritionResult").innerHTML = "";
+    document.getElementById("restaurantResult").innerHTML = `
+      <p>🏠 <strong>推薦餐廳:</strong>
+        <ul>
+          ${analysisResult.restaurants.length > 0 
+            ? analysisResult.restaurants.map(r => `<li>${r}</li>`).join("") 
+            : "<li>無推薦</li>"}
+        </ul>
+      </p>
+    `;
+  }
+  </script>
+</body>
+</html>
