@@ -10,10 +10,10 @@
 2. 從VSCode打開這個資料夾
 3. 進去 .env
 4. 填入Azure環境變數
-   - VISION_KEY 為電腦視覺金鑰
-   - VISION_ENDPOINT 為電腦視覺端點
-   - TRANSLATOR_KEY  為翻譯工具金鑰
-   - TRANSLATOR_REGION  為翻譯工具位置/區域
+   - VISION_KEY ➡️電腦視覺金鑰
+   - VISION_ENDPOINT ➡️電腦視覺端點
+   - TRANSLATOR_KEY  ➡️翻譯工具金鑰
+   - TRANSLATOR_REGION  ➡️翻譯工具位置/區域
    - ❗記得按儲存❗
 # Step 3. 開啟VSCode終端機
 下面指令可以改成自己喜歡的名字
