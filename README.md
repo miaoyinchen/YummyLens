@@ -1,11 +1,11 @@
 # YummyLens
 這是一個上傳***食物照片***，就能夠查詢該食物的***熱量和蛋白質***，也能夠查詢與該食物相關的***推薦餐廳***
-# 前往Azure
+# Step 1.前往Azure
 1. 建立一個資源群組
 2. 建立一個電腦視覺
 3. 建立一個翻譯工具
 4. 請勿關掉Azure 頁面，稍後還需要用到
-# 下載這份GitHub檔案
+# Step 2.下載這份GitHub檔案
 1. 解壓縮這個資料夾
 2. 從VSCode打開這個資料夾
 3. 進去 .env
@@ -15,7 +15,7 @@
    - TRANSLATOR_KEY  為翻譯工具金鑰
    - TRANSLATOR_REGION  為翻譯工具位置/區域
    - ❗記得按儲存❗
-# 開啟VSCode終端機
+# Step 3. 開啟VSCode終端機
 下面指令可以改成自己喜歡的名字
 
 記得開啟docker
@@ -23,7 +23,7 @@
 2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
 3. ❗稍等40秒鐘❗
 4. 打開http://127.0.0.1:8080
-# 如何操作網頁
+# Step 4. 如何操作網頁
 1. 按【上傳檔案】
 2. 找到food_images這個資料夾(就在剛剛解壓縮的資料夾裡面)
 3. 隨意選擇其中一張照片檔(一定要是.jpg .jpeg .png .bmp)
