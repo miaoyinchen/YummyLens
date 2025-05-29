@@ -17,6 +17,8 @@
    - ❗記得按儲存❗
 # 開啟VSCode終端機
 下面指令可以改成自己喜歡的名字
+
+記得開啟docker
 1. `docker image build -t yummylens:latest .`  (大約需跑一分半)
 2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
 3. ❗稍等10秒鐘❗
