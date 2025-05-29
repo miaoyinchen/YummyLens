@@ -21,7 +21,7 @@
 記得開啟docker
 1. `docker image build -t yummylens:latest .`  (大約需跑一分半)
 2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
-3. ❗稍等10秒鐘❗
+3. ❗稍等40秒鐘❗
 4. 打開http://127.0.0.1:8080
 # 如何操作網頁
 1. 按【上傳檔案】
