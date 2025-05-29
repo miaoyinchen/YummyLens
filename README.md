@@ -19,7 +19,10 @@
 下面指令可以改成自己喜歡的名字
 
 記得開啟docker
-1. `docker image build -t yummylens:latest .`  (可能需跑一分半)
+1. ˋpython -m venv venvˋ
+2. ˋvenv/Scripts/activateˋ
+3. ˋpip install -r requirements.txtˋ
+1. `docker image build -t yummylens:latest .`
 2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
 3. ❗稍等40秒鐘❗
 4. 打開http://127.0.0.1:8080
