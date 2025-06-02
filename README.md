@@ -19,12 +19,9 @@
 下面指令可以改成自己喜歡的名字
 
 記得開啟docker
-1. `python -m venv venv`
-2. `venv/Scripts/activate`
-3. `pip install -r requirements.txt`
 1. `docker image build -t yummylens:latest .`
 2. `docker container run -d --name lens -p 8080:8080 yummylens:latest`
-3. ❗稍等40秒鐘❗
+3. ❗稍等40秒鐘或更久❗(可以用 `docker logs lens`查看進度，但非必要)
 4. 打開http://127.0.0.1:8080
 # Step 4. 如何操作網頁
 1. 按【上傳檔案】
